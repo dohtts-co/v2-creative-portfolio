@@ -3,3 +3,10 @@ SITE_TEMPLATE.md
 simba conteh context.txt
 University CV.pdf
 portfolio analysis/
+
+# Local archive + working duplicate (index.html is the live file)
+index-v1-bonsai.html
+index-v2.html
+
+# Heavy unused HD GIF exports — kept locally, not deployed
+images/photography/*.gif
