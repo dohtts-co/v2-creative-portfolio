@@ -10,3 +10,6 @@ index-v2.html
 
 # Heavy unused HD GIF exports — kept locally, not deployed
 images/photography/*.gif
+
+# Source audio master (web version lives at audio/ambient.mp3)
+/*.mp3
