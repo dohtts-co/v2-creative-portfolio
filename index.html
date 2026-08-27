@@ -151,7 +151,8 @@
     .cm.br { bottom:2rem; right:2rem; text-align:right; }
 
     .hero-name {
-      position:absolute; left:13vw; top:50%;
+      position:absolute; left:11vw; top:50%;
+      max-width:calc(100vw - 6vw);
       transform:translateY(-52%);
       z-index:2; line-height:.85;
       pointer-events:none;
@@ -160,11 +161,12 @@
     }
     .hn1,.hn2 {
       font-family:'Apollo',serif;
-      font-size:clamp(68px,18vw,250px);
+      font-size:clamp(56px,16.5vw,240px);
       letter-spacing:-.015em; display:block;
+      white-space:nowrap;
     }
     .hn1 { font-style:normal; }
-    .hn2 { font-style:italic; margin-left:1.5vw; }
+    .hn2 { font-style:italic; margin-left:1vw; }
     .hero-sub {
       display:block; margin-top:1.6rem; margin-left:.2rem;
       font-family:'JetBrains Mono',monospace;
@@ -713,8 +715,8 @@
     @media(max-width:768px){
       #burger-nav { top:1rem; right:1rem; }
       #sound-toggle { top:4.6rem; left:1rem; width:38px; height:38px; }
-      .hero-name { left:5vw; top:auto; bottom:30%; transform:none; }
-      .hn1,.hn2  { font-size:clamp(52px,15vw,110px); }
+      .hero-name { left:5vw; top:auto; bottom:30%; transform:none; max-width:90vw; }
+      .hn1,.hn2  { font-size:clamp(44px,13.5vw,104px); }
       .float-nav {
         top:auto; bottom:0; left:0; right:0; height:auto;
         display:flex; justify-content:space-around; align-items:flex-end;
