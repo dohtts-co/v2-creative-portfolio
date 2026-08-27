@@ -356,36 +356,58 @@
     /* ══════════════════════
        WORK
     ══════════════════════ */
-    .work-list { list-style:none; }
-    .wi {
-      display:grid;
-      grid-template-columns:2.5rem 1fr auto;
-      column-gap:1.5rem; row-gap:.35rem;
-      align-items:center;
-      padding:1.75rem 0; border-bottom:1px solid var(--li);
-      text-decoration:none; color:var(--ink);
-      position:relative; overflow:hidden;
+    .work-h2 {
+      font-family:'Apollo',serif; font-weight:400;
+      font-size:clamp(30px,4.2vw,58px); line-height:.92;
+      letter-spacing:-.02em; color:var(--ink); margin-top:.2rem;
     }
-    .wi::after {
-      content:''; position:absolute; inset:0;
-      background:var(--ink);
-      transform:translateX(-101%);
-      transition:transform .55s cubic-bezier(.77,0,.175,1);
-      z-index:0;
+    .work-lead {
+      font-size:clamp(13px,1.2vw,16px); font-weight:300; line-height:1.7;
+      color:var(--mu); max-width:52ch; margin:1.2rem 0 3rem;
     }
-    .wi:hover::after { transform:translateX(0); }
-    .wi:hover .wi-n,.wi:hover .wi-title,.wi:hover .wi-desc,
-    .wi:hover .wi-tags span {
-      color:var(--bg); border-color:rgba(255,255,255,.2);
+    .work-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    @media(max-width:980px){ .work-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:640px){ .work-grid { grid-template-columns:1fr; } }
+    .work-card {
+      display:flex; flex-direction:column;
+      border:1px solid var(--li); background:var(--bg);
+      transition:border-color .3s, box-shadow .35s, transform .35s cubic-bezier(.16,1,.3,1);
     }
-    .wi:hover .wi-arr { color:var(--ac); }
-    .wi-n     { grid-column:1; grid-row:1/3; align-self:center; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--mu); position:relative; z-index:1; transition:color .3s; }
-    .wi-title { grid-column:2; grid-row:1; font-family:'Apollo',serif; font-style:italic; font-size:clamp(20px,2.8vw,36px); position:relative; z-index:1; transition:color .3s; }
-    .wi-desc  { grid-column:2; grid-row:2; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.06em; color:var(--mu); position:relative; z-index:1; transition:color .3s; }
-    .wi-tags  { grid-column:3; grid-row:1; display:flex; gap:.4rem; flex-wrap:wrap; justify-content:flex-end; position:relative; z-index:1; }
-    .wi-tags span { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.08em; text-transform:uppercase; border:1px solid var(--li); padding:.25rem .55rem; transition:color .3s, border-color .3s; }
-    .wi-arr { position:absolute; right:.25rem; top:1.75rem; z-index:1; font-size:14px; color:var(--mu); transition:color .3s, transform .35s cubic-bezier(.16,1,.3,1); }
-    .wi:hover .wi-arr { transform:translate(4px,-4px); }
+    .work-card:hover {
+      border-color:var(--li2);
+      box-shadow:0 18px 44px rgba(0,0,0,.09);
+      transform:translateY(-5px);
+    }
+    .wc-thumb {
+      display:block; overflow:hidden; aspect-ratio:16/10;
+      background:var(--li); border-bottom:1px solid var(--li);
+    }
+    .wc-thumb img {
+      width:100%; height:100%; object-fit:cover; object-position:top center;
+      filter:grayscale(1); transform:scale(1.001);
+      transition:filter .55s ease, transform .9s cubic-bezier(.16,1,.3,1);
+    }
+    .work-card:hover .wc-thumb img { filter:grayscale(0); transform:scale(1.05); }
+    .wc-body { display:flex; flex-direction:column; gap:.85rem; padding:1.4rem 1.4rem 1.5rem; flex:1; }
+    .wc-tags { display:flex; flex-wrap:wrap; gap:.4rem; }
+    .wc-tags span {
+      font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--mu);
+      border:1px solid var(--li); padding:.28rem .55rem;
+    }
+    .wc-title { font-family:'Apollo',serif; font-style:italic; font-weight:400; font-size:clamp(19px,1.9vw,25px); color:var(--ink); }
+    .wc-desc { font-size:13px; font-weight:300; line-height:1.7; color:var(--mu); flex:1; }
+    .wc-btn {
+      align-self:flex-start; margin-top:.5rem;
+      display:inline-flex; align-items:center; gap:.5rem;
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--ink); text-decoration:none;
+      border:1px solid var(--ink); padding:.6rem .95rem;
+      transition:background .3s, color .3s;
+    }
+    .wc-btn:hover { background:var(--ink); color:var(--bg); }
+    .wc-btn span { display:inline-block; transition:transform .35s cubic-bezier(.16,1,.3,1); }
+    .wc-btn:hover span { transform:translate(3px,-3px); color:var(--ac2); }
 
     /* ══════════════════════
        SKILLS — large editorial type
@@ -548,65 +570,6 @@
     .rv { opacity:0; transform:translateY(28px); transition:opacity .85s ease, transform .85s ease; }
     .rv.in { opacity:1; transform:none; }
 
-    /* Work preview — CRT glitch reveal */
-    #work-preview {
-      position:fixed; pointer-events:none; z-index:200;
-      width:300px; height:auto; overflow:hidden;
-      opacity:0; transform:scale(.96);
-      transition:opacity .16s ease;
-    }
-    #work-preview.show { opacity:1; transform:scale(1); }
-    #work-preview img {
-      width:100%; height:auto; display:block;
-      filter:grayscale(1);
-      will-change:transform, clip-path, filter;
-    }
-    /* Scanlines */
-    #work-preview::before {
-      content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
-      background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
-      mix-blend-mode:multiply; opacity:.55;
-    }
-    /* Scan sweep bar */
-    #work-preview::after {
-      content:''; position:absolute; left:0; right:0; height:16%; z-index:3;
-      pointer-events:none; opacity:0;
-      background:linear-gradient(rgba(255,255,255,.22), transparent);
-    }
-    #work-preview.show::after { animation:scanSweep 2.6s linear infinite; }
-    #work-preview.show img {
-      animation:glitchIn .42s steps(2,end) both,
-                glitchIdle 3.4s .5s steps(1,end) infinite;
-    }
-
-    @keyframes glitchIn {
-      0%   { clip-path:inset(0 0 86% 0); transform:translate(-9px,0) scale(1.03);
-             filter:grayscale(1) drop-shadow(3px 0 var(--ac)) drop-shadow(-3px 0 #3fb6c4); opacity:.25; }
-      22%  { clip-path:inset(42% 0 22% 0); transform:translate(7px,0) scale(1.02); opacity:1; }
-      40%  { clip-path:inset(72% 0 4% 0);  transform:translate(-5px,0);
-             filter:grayscale(1) drop-shadow(-4px 0 var(--ac)) drop-shadow(4px 0 #3fb6c4); }
-      58%  { clip-path:inset(14% 0 58% 0); transform:translate(4px,0); }
-      76%  { clip-path:inset(4% 0 2% 0);   transform:translate(-2px,0);
-             filter:grayscale(1) drop-shadow(2px 0 var(--ac)); }
-      100% { clip-path:inset(0 0 0 0); transform:none; filter:grayscale(1); opacity:1; }
-    }
-    /* Occasional idle stutter so the panel stays "alive" while open */
-    @keyframes glitchIdle {
-      0%, 90%, 100% { clip-path:inset(0 0 0 0); transform:none; filter:grayscale(1); }
-      91% { clip-path:inset(30% 0 46% 0); transform:translateX(-5px);
-            filter:grayscale(1) drop-shadow(3px 0 var(--ac)) drop-shadow(-3px 0 #3fb6c4); }
-      94% { clip-path:inset(62% 0 12% 0); transform:translateX(4px); }
-      97% { clip-path:inset(8% 0 72% 0);  transform:translateX(-3px);
-            filter:grayscale(1) drop-shadow(-2px 0 var(--ac)); }
-    }
-    @keyframes scanSweep {
-      0%   { top:-16%; opacity:.7; }
-      100% { top:116%; opacity:.7; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      #work-preview.show img { animation:none; clip-path:none; filter:grayscale(1); }
-      #work-preview.show::after { animation:none; opacity:0; }
-    }
 
     /* ══════════════════════
        FLOATING BURGER NAV
@@ -742,7 +705,6 @@
 
 <div class="grain" aria-hidden="true"></div>
 <div id="cdot" aria-hidden="true"></div><div id="cring" aria-hidden="true"></div>
-<div id="work-preview" aria-hidden="true"><img src="" alt=""></div>
 
 <!-- ═══ AMBIENT SOUND ═══ -->
 <button id="sound-toggle" type="button" aria-label="Play background sound" aria-pressed="false" title="Background sound">
@@ -912,47 +874,74 @@
     </section>
 
     <!-- ═══ WORK ═════════════════════════════════════ -->
-    <!-- NOTE (Simba): the .wi-desc lines below are inferred from each project's name/stack.
-         Swap them for accurate one-liners describing what each build actually is. -->
     <section id="work" aria-labelledby="work-heading">
       <div class="ed-label rv" id="work-heading">[ 02 — Selected Work ]</div>
-      <ul class="work-list">
-        <li><a href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener" class="wi rv" data-preview="images/AM Volleyball.png">
-          <span class="wi-n">01</span>
-          <span class="wi-title">AM Volleyball</span>
-          <span class="wi-desc">Club site — fixtures, roster &amp; signups</span>
-          <span class="wi-tags"><span>Next.js</span><span>Tailwind</span><span>Vercel</span></span>
-          <span class="wi-arr" aria-hidden="true">↗</span>
-        </a></li>
-        <li><a href="https://pott-st-bagels.vercel.app/" target="_blank" rel="noopener" class="wi rv" style="transition-delay:.05s" data-preview="images/pottstbagels.png">
-          <span class="wi-n">02</span>
-          <span class="wi-title">Pott St Bagels</span>
-          <span class="wi-desc">Storefront for a Manchester bagel spot</span>
-          <span class="wi-tags"><span>Next.js</span><span>TypeScript</span><span>Tailwind</span></span>
-          <span class="wi-arr" aria-hidden="true">↗</span>
-        </a></li>
-        <li><a href="https://floranica.vercel.app/" target="_blank" rel="noopener" class="wi rv" style="transition-delay:.1s" data-preview="images/floranica.png">
-          <span class="wi-n">03</span>
-          <span class="wi-title">Floranica</span>
-          <span class="wi-desc">Full-stack product with a Postgres backend</span>
-          <span class="wi-tags"><span>Next.js</span><span>TypeScript</span><span>PostgreSQL</span><span>Prisma</span></span>
-          <span class="wi-arr" aria-hidden="true">↗</span>
-        </a></li>
-        <li><a href="https://3minutes.wtf/" target="_blank" rel="noopener" class="wi rv" style="transition-delay:.15s" data-preview="images/3minutewtf.png">
-          <span class="wi-n">04</span>
-          <span class="wi-title">3 Minutes</span>
-          <span class="wi-desc">A fast, playful browser experiment</span>
-          <span class="wi-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></span>
-          <span class="wi-arr" aria-hidden="true">↗</span>
-        </a></li>
-        <li><a href="https://falkor-portfolio-production.up.railway.app/portfolio.html" target="_blank" rel="noopener" class="wi rv" style="transition-delay:.2s" data-preview="images/Falkor Portfolio.png">
-          <span class="wi-n">05</span>
-          <span class="wi-title">Falkor Portfolio</span>
-          <span class="wi-desc">A hand-built creative portfolio</span>
-          <span class="wi-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></span>
-          <span class="wi-arr" aria-hidden="true">↗</span>
-        </a></li>
-      </ul>
+      <h2 class="work-h2 reveal"><span class="line"><span>Projects I've Built</span></span></h2>
+      <p class="work-lead rv" style="transition-delay:.08s">Full-stack applications, client websites and volunteer work — all live and deployed.</p>
+
+      <div class="work-grid">
+
+        <article class="work-card rv">
+          <a class="wc-thumb" href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+            <img src="images/AM Volleyball.png" alt="AM Volleyball website screenshot" loading="lazy" decoding="async">
+          </a>
+          <div class="wc-body">
+            <div class="wc-tags"><span>Next.js</span><span>Tailwind</span><span>Vercel</span></div>
+            <h3 class="wc-title">AM Volleyball</h3>
+            <p class="wc-desc">Club website for AM Volleyball — clean, responsive design focused on team info and events.</p>
+            <a class="wc-btn" href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener">Live Site <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="work-card rv" style="transition-delay:.06s">
+          <a class="wc-thumb" href="https://pott-st-bagels.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+            <img src="images/pottstbagels.png" alt="Pott St Bagels website screenshot" loading="lazy" decoding="async">
+          </a>
+          <div class="wc-body">
+            <div class="wc-tags"><span>Next.js</span><span>TypeScript</span><span>Tailwind</span></div>
+            <h3 class="wc-title">Pott St Bagels</h3>
+            <p class="wc-desc">Artisan bagel shop website with menu presentation and brand identity for a local Manchester business.</p>
+            <a class="wc-btn" href="https://pott-st-bagels.vercel.app/" target="_blank" rel="noopener">Live Site <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="work-card rv" style="transition-delay:.12s">
+          <a class="wc-thumb" href="https://floranica.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+            <img src="images/floranica.png" alt="Floranica inventory management app screenshot" loading="lazy" decoding="async">
+          </a>
+          <div class="wc-body">
+            <div class="wc-tags"><span>Next.js</span><span>TypeScript</span><span>PostgreSQL</span><span>Prisma</span></div>
+            <h3 class="wc-title">Floranica</h3>
+            <p class="wc-desc">Full-stack inventory management — secure auth, CRUD, supplier management, Neon PostgreSQL deployed to Vercel.</p>
+            <a class="wc-btn" href="https://floranica.vercel.app/" target="_blank" rel="noopener">Live Site <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="work-card rv" style="transition-delay:.06s">
+          <a class="wc-thumb" href="https://3minutes.wtf/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+            <img src="images/3minutewtf.png" alt="3 Minutes awareness platform screenshot" loading="lazy" decoding="async">
+          </a>
+          <div class="wc-body">
+            <div class="wc-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+            <h3 class="wc-title">3 Minutes</h3>
+            <p class="wc-desc">Interactive awareness platform on animal cruelty — survey-driven UX, CTA workflows, and curated photography.</p>
+            <a class="wc-btn" href="https://3minutes.wtf/" target="_blank" rel="noopener">Live Site <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="work-card rv" style="transition-delay:.12s">
+          <a class="wc-thumb" href="https://falkor-portfolio-production.up.railway.app/portfolio.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+            <img src="images/Falkor Portfolio.png" alt="Portfolio v1 screenshot" loading="lazy" decoding="async">
+          </a>
+          <div class="wc-body">
+            <div class="wc-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+            <h3 class="wc-title">Portfolio v1</h3>
+            <p class="wc-desc">First iteration of personal portfolio — establishing an online presence and documenting early web work.</p>
+            <a class="wc-btn" href="https://falkor-portfolio-production.up.railway.app/portfolio.html" target="_blank" rel="noopener">View <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+      </div>
     </section>
 
     <!-- ═══ SKILLS ═══════════════════════════════════ -->
@@ -1252,30 +1241,6 @@
     document.title = document.hidden ? '— away —' : orig;
   });
 
-  /* ── Work preview ── */
-  const wpanel = document.getElementById('work-preview');
-  const wimg   = wpanel.querySelector('img');
-  let wx=0, wy=0, wraf;
-  function movePreview(){
-    const offset = 24;
-    let x = wx + offset;
-    let y = wy - wpanel.offsetHeight/2;
-    if(x + wpanel.offsetWidth  > window.innerWidth)  x = wx - wpanel.offsetWidth  - offset;
-    if(y < 8) y = 8;
-    if(y + wpanel.offsetHeight > window.innerHeight)  y = window.innerHeight - wpanel.offsetHeight - 8;
-    wpanel.style.left = x+'px';
-    wpanel.style.top  = y+'px';
-  }
-  document.querySelectorAll('.wi[data-preview]').forEach(wi => {
-    wi.addEventListener('mouseenter', () => { wimg.src=wi.dataset.preview; wpanel.classList.add('show'); });
-    wi.addEventListener('mouseleave', () => wpanel.classList.remove('show'));
-    wi.addEventListener('mousemove',  e => {
-      wx=e.clientX; wy=e.clientY;
-      cancelAnimationFrame(wraf);
-      wraf = requestAnimationFrame(movePreview);
-    });
-  });
-
   /* ── Floating burger nav ── */
   const burgerNav  = document.getElementById('burger-nav');
   const burgerBtn  = document.getElementById('burger-btn');
@@ -1378,7 +1343,7 @@
 
   /* ── Image-save deterrence (friction, not real protection) ── */
   document.addEventListener('contextmenu', e => {
-    if(e.target.closest('img, video, .photo-item, #work-preview, .tree-img')) e.preventDefault();
+    if(e.target.closest('img, video, .photo-item, .wc-thumb, .tree-img')) e.preventDefault();
   });
   document.addEventListener('dragstart', e => {
     if(e.target.matches('img, video')) e.preventDefault();
