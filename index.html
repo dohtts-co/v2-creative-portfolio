@@ -622,6 +622,17 @@
     .photo-item:hover video { filter:grayscale(0); transform:scale(1.04); }
     .photo-video { background:#000; }
 
+    /* Motion / recent films */
+    .film-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+    @media(max-width:700px){ .film-grid { grid-template-columns:1fr; } }
+    .film-item { margin:0; }
+    .film-video { width:100%; aspect-ratio:4/3; display:block; background:#000; border:1px solid var(--li); }
+    .film-item figcaption {
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-top:.7rem;
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink);
+    }
+    .film-item figcaption span { color:var(--mu); }
+
     /* ══════════════════════
        CONTACT
     ══════════════════════ */
@@ -1098,7 +1109,7 @@
 
     <!-- ═══ PHOTOGRAPHY ═══════════════════════════════ -->
     <section id="photography" aria-labelledby="photo-heading">
-      <div class="ed-label rv" id="photo-heading">(04) Photography</div>
+      <div class="ed-label rv" id="photo-heading">(04) Photography &amp; Film</div>
       <div class="pl-meta rv">
         <span>Live &amp; Concert Photography</span>
         <span class="r">Kaytranada · Westside Gunn</span>
@@ -1151,6 +1162,22 @@
             <source src="images/photography/westside-gunn-clip2.mp4" type="video/mp4">
           </video>
           <figcaption>Westside Gunn · Live <span>clip</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="photo-set-label mt rv"><span>Motion</span> · Recent Films</div>
+      <div class="film-grid">
+        <figure class="film-item rv">
+          <video class="film-video" controls preload="metadata" playsinline poster="images/video/graduation-2026-poster.jpg">
+            <source src="images/video/graduation-2026.mp4" type="video/mp4">
+          </video>
+          <figcaption>Graduation 2026 <span>Personal</span></figcaption>
+        </figure>
+        <figure class="film-item rv" style="transition-delay:.08s">
+          <video class="film-video" controls preload="metadata" playsinline poster="images/video/am-tournament-2026-poster.jpg">
+            <source src="images/video/am-tournament-2026.mp4" type="video/mp4">
+          </video>
+          <figcaption>AM Volleyball · Spring Tournament 2026 <span>Event</span></figcaption>
         </figure>
       </div>
     </section>
