@@ -97,11 +97,21 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration:.001ms!important; transition-duration:.001ms!important; }
     }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%; text-size-adjust: 100%;   /* stop iOS Safari inflating text (caused clipping) */
+    }
     body {
       font-family: 'Space Grotesk', system-ui, sans-serif;
       background: var(--bg); color: var(--ink);
-      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+      overflow-x: hidden; max-width: 100%; -webkit-font-smoothing: antialiased;
+    }
+    /* Respect iPhone safe areas (notch / rounded corners) */
+    @supports (padding: max(0px)) {
+      section:not(#hero), footer {
+        padding-left: max(6vw, env(safe-area-inset-left));
+        padding-right: max(6vw, env(safe-area-inset-right));
+      }
     }
     @media (hover:hover) and (pointer:fine) { body,a,button { cursor: none; } }
 
