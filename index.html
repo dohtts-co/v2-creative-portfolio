@@ -10,6 +10,18 @@
   <link rel="canonical" href="https://dohtts.co/">
   <meta name="theme-color" content="#FFFFFF">
 
+  <!-- Theme init before paint (saved choice > time of day) to avoid a flash -->
+  <script>
+    (function(){
+      try {
+        var s = localStorage.getItem('theme');
+        var h = new Date().getHours();
+        var m = (s === 'dark' || s === 'light') ? s : ((h >= 19 || h < 7) ? 'dark' : 'light');
+        if (m === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch(e){}
+    })();
+  </script>
+
   <!-- Open Graph / social preview -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dohtts.co/">
@@ -62,6 +74,19 @@
       --ac:  #C1613F;   /* warm terracotta — earthy nod to the bonsai; used only on interaction */
       --ac2: #E0A88C;
     }
+    :root[data-theme="dark"] {
+      --bg:  #0D0D0D;
+      --ink: #F2EFEA;
+      --mu:  #8f8a83;
+      --li:  #262420;
+      --li2: #3a362f;
+      --ac:  #D0724E;
+      --ac2: #E7B393;
+    }
+    /* Bonsai is a black-on-white JPG — invert it in dark so it reads as white-on-black */
+    :root[data-theme="dark"] .tree-img { filter:invert(1); }
+    :root { color-scheme: light; }
+    :root[data-theme="dark"] { color-scheme: dark; }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     @media (prefers-reduced-motion: reduce) {
@@ -107,13 +132,13 @@
     /* ── CURSOR ── */
     #cdot {
       position:fixed; top:0; left:0; width:4px; height:4px;
-      background:#000; border-radius:50%;
+      background:var(--ink); border-radius:50%;
       pointer-events:none; z-index:9999;
       transform:translate(-50%,-50%);
     }
     #cring {
       position:fixed; top:0; left:0; width:28px; height:28px;
-      border:1px solid #000; border-radius:50%;
+      border:1px solid var(--ink); border-radius:50%;
       pointer-events:none; z-index:9998;
       transform:translate(-50%,-50%);
       transition:width .25s, height .25s, border-color .25s;
@@ -129,7 +154,7 @@
     ══════════════════════ */
     #hero {
       position:relative; width:100vw; height:100vh;
-      background:#fff; overflow:hidden;
+      background:var(--bg); overflow:hidden;
     }
     .tree-img {
       position:absolute; bottom:0; left:0;
@@ -180,7 +205,7 @@
       position:absolute; pointer-events:all;
       display:flex; flex-direction:column;
       align-items:center; gap:.35rem;
-      text-decoration:none; color:#000;
+      text-decoration:none; color:var(--ink);
       transition:opacity .2s;
     }
     .fnav:hover { opacity:.85; }
@@ -645,19 +670,43 @@
     .bm-top { border-top:1px solid var(--li); margin-top:.3rem; }
 
     /* ══════════════════════
-       AMBIENT SOUND TOGGLE
+       CONTROL DOCK (theme + sound) — off-screen, arrow handle
     ══════════════════════ */
-    #sound-toggle {
-      position:fixed; top:5.4rem; left:1.6rem; z-index:9995;
+    #control-dock {
+      position:fixed; left:0; top:5.4rem; z-index:9995;
+      display:flex; align-items:stretch;
+      transform:translateX(calc(-100% + 28px));
+      opacity:0; pointer-events:none;
+      transition:transform .45s cubic-bezier(.16,1,.3,1), opacity .5s ease;
+    }
+    #control-dock.ready { opacity:1; pointer-events:auto; }
+    #control-dock.open { transform:translateX(0); }
+    .dock-panel {
+      display:flex; align-items:center; gap:.5rem; padding:.5rem;
+      background:var(--bg); border:1px solid var(--li); border-left:none;
+      box-shadow:0 8px 24px rgba(0,0,0,.12);
+    }
+    .dock-btn {
+      position:relative;
       width:42px; height:42px; border-radius:50%;
       display:flex; align-items:center; justify-content:center;
-      background:var(--bg); border:1px solid var(--li);
-      box-shadow:0 4px 16px rgba(0,0,0,.06);
-      opacity:0; transform:translateY(-6px); pointer-events:none;
-      transition:opacity .6s ease, transform .6s ease, border-color .25s;
+      background:var(--bg); border:1px solid var(--li); color:var(--ink);
+      transition:border-color .25s, color .25s;
     }
-    #sound-toggle.show { opacity:1; transform:none; pointer-events:auto; }
-    #sound-toggle:hover { border-color:var(--ink); }
+    .dock-btn:hover { border-color:var(--ink); }
+    .dock-btn svg { width:17px; height:17px; display:block; }
+    .dock-handle {
+      align-self:stretch; width:28px; min-height:54px;
+      display:flex; align-items:center; justify-content:center;
+      background:var(--ink); color:var(--bg); border:none;
+    }
+    .dock-arrow { font-size:17px; line-height:1; transition:transform .45s cubic-bezier(.16,1,.3,1); }
+    #control-dock.open .dock-arrow { transform:rotate(180deg); }
+    /* Theme icon swap */
+    #theme-toggle .icon-sun { display:none; }
+    :root[data-theme="dark"] #theme-toggle .icon-sun { display:block; }
+    :root[data-theme="dark"] #theme-toggle .icon-moon { display:none; }
+    /* Sound equaliser */
     .eq { display:flex; align-items:flex-end; gap:2px; height:13px; }
     .eq i {
       width:2px; height:13px; background:var(--ink);
@@ -680,13 +729,13 @@
     /* ── MOBILE ── */
     @media(max-width:768px){
       #burger-nav { top:1rem; right:1rem; }
-      #sound-toggle { top:4.6rem; left:1rem; width:38px; height:38px; }
+      #control-dock { top:4.6rem; }
       .hero-name { left:5vw; top:auto; bottom:30%; transform:none; max-width:90vw; }
       .hn1,.hn2  { font-size:clamp(44px,13.5vw,104px); }
       .float-nav {
         top:auto; bottom:0; left:0; right:0; height:auto;
         display:flex; justify-content:space-around; align-items:flex-end;
-        background:#fff; border-top:1px solid var(--li);
+        background:var(--bg); border-top:1px solid var(--li);
         padding:1rem .5rem 1.25rem; gap:0;
       }
       .fnav[data-s="about"],.fnav[data-s="work"],
@@ -709,10 +758,21 @@
 <div class="grain" aria-hidden="true"></div>
 <div id="cdot" aria-hidden="true"></div><div id="cring" aria-hidden="true"></div>
 
-<!-- ═══ AMBIENT SOUND ═══ -->
-<button id="sound-toggle" type="button" aria-label="Play background sound" aria-pressed="false" title="Background sound">
-  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
-</button>
+<!-- ═══ CONTROL DOCK (theme + sound) ═══ -->
+<div id="control-dock">
+  <div class="dock-panel">
+    <button id="theme-toggle" class="dock-btn" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Theme">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </button>
+    <button id="sound-toggle" class="dock-btn" type="button" aria-label="Play background sound" aria-pressed="false" title="Background sound">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+  </div>
+  <button id="dock-handle" class="dock-handle" type="button" aria-label="Show settings" aria-expanded="false" aria-controls="control-dock">
+    <span class="dock-arrow" aria-hidden="true">›</span>
+  </button>
+</div>
 <audio id="bg-audio" loop preload="none">
   <source src="audio/ambient.mp3" type="audio/mpeg">
 </audio>
@@ -1331,7 +1391,6 @@
   }
   function initAmbientAudio(){
     if(!bgAudio || !soundBtn) return;
-    soundBtn.classList.add('show');
     bgAudio.volume = 0;
     markMuted();
     tryPlay();
@@ -1351,6 +1410,48 @@
   document.addEventListener('dragstart', e => {
     if(e.target.matches('img, video')) e.preventDefault();
   });
+
+  /* ── Theme (light/dark) + control dock ── */
+  const docEl        = document.documentElement;
+  const themeBtn     = document.getElementById('theme-toggle');
+  const controlDock  = document.getElementById('control-dock');
+  const dockHandle   = document.getElementById('dock-handle');
+  const metaTheme    = document.querySelector('meta[name="theme-color"]');
+
+  function applyTheme(mode){
+    if(mode === 'dark') docEl.setAttribute('data-theme','dark');
+    else docEl.removeAttribute('data-theme');
+    if(metaTheme) metaTheme.setAttribute('content', mode === 'dark' ? '#0D0D0D' : '#FFFFFF');
+    if(themeBtn){
+      themeBtn.setAttribute('aria-label', mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      themeBtn.setAttribute('aria-pressed', mode === 'dark' ? 'true' : 'false');
+    }
+  }
+  function currentMode(){ return docEl.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+
+  // Sync button/meta with whatever the head script already set (saved choice > time of day)
+  applyTheme(currentMode());
+
+  if(themeBtn){
+    themeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const next = currentMode() === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem('theme', next); } catch(err){}
+    });
+  }
+
+  if(controlDock && dockHandle){
+    setTimeout(() => controlDock.classList.add('ready'), 600);
+    function closeDock(){ controlDock.classList.remove('open'); dockHandle.setAttribute('aria-expanded','false'); }
+    dockHandle.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = controlDock.classList.toggle('open');
+      dockHandle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', e => { if(!controlDock.contains(e.target)) closeDock(); });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDock(); });
+  }
 
   /* ── Reduced-motion: hold looping clips on their poster frame ── */
   if(reduceMotion){
