@@ -75,11 +75,11 @@
       --ac2: #E0A88C;
     }
     :root[data-theme="dark"] {
-      --bg:  #0D0D0D;
+      --bg:  #000000;   /* pure black so the inverted (white-bg) bonsai JPG merges seamlessly */
       --ink: #F2EFEA;
       --mu:  #8f8a83;
-      --li:  #262420;
-      --li2: #3a362f;
+      --li:  #23211d;
+      --li2: #38342e;
       --ac:  #D0724E;
       --ac2: #E7B393;
     }
@@ -1421,7 +1421,7 @@
   function applyTheme(mode){
     if(mode === 'dark') docEl.setAttribute('data-theme','dark');
     else docEl.removeAttribute('data-theme');
-    if(metaTheme) metaTheme.setAttribute('content', mode === 'dark' ? '#0D0D0D' : '#FFFFFF');
+    if(metaTheme) metaTheme.setAttribute('content', mode === 'dark' ? '#000000' : '#FFFFFF');
     if(themeBtn){
       themeBtn.setAttribute('aria-label', mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
       themeBtn.setAttribute('aria-pressed', mode === 'dark' ? 'true' : 'false');
