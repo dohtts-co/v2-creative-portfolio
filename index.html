@@ -622,11 +622,29 @@
     .photo-item:hover video { filter:grayscale(0); transform:scale(1.04); }
     .photo-video { background:#000; }
 
-    /* Motion / recent films */
+    /* Motion / recent films (boomerang loop, click for sound) */
     .film-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
     @media(max-width:700px){ .film-grid { grid-template-columns:1fr; } }
     .film-item { margin:0; }
-    .film-video { width:100%; aspect-ratio:4/3; display:block; background:#000; border:1px solid var(--li); }
+    .film-wrap { position:relative; overflow:hidden; }
+    .film-video { width:100%; aspect-ratio:4/3; display:block; background:#000; border:1px solid var(--li); cursor:pointer; object-fit:cover; }
+    .film-ctrl {
+      position:absolute; left:0; right:0; bottom:0;
+      display:flex; align-items:center; gap:.7rem; padding:.7rem .85rem;
+      background:linear-gradient(transparent, rgba(0,0,0,.55));
+      opacity:0; transition:opacity .3s ease; pointer-events:none;
+    }
+    .film-wrap:hover .film-ctrl, .film-wrap:focus-within .film-ctrl, .film-ctrl.sound { opacity:1; pointer-events:auto; }
+    .film-mute {
+      flex-shrink:0; width:32px; height:32px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.45); color:#fff;
+    }
+    .film-mute svg { width:14px; height:14px; }
+    .film-mute .icon-on { display:none; }
+    .film-mute.on .icon-on { display:block; }
+    .film-mute.on .icon-muted { display:none; }
+    .film-vol { width:88px; height:3px; accent-color:var(--ac); cursor:pointer; }
     .film-item figcaption {
       display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-top:.7rem;
       font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink);
@@ -1168,15 +1186,33 @@
       <div class="photo-set-label mt rv"><span>Motion</span> · Recent Films</div>
       <div class="film-grid">
         <figure class="film-item rv">
-          <video class="film-video" controls preload="metadata" playsinline poster="images/video/graduation-2026-poster.jpg">
-            <source src="images/video/graduation-2026.mp4" type="video/mp4">
-          </video>
+          <div class="film-wrap">
+            <video class="film-video" autoplay muted loop playsinline preload="metadata" controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture poster="images/video/graduation-2026-poster.jpg">
+              <source src="images/video/graduation-2026.mp4" type="video/mp4">
+            </video>
+            <div class="film-ctrl" aria-hidden="false">
+              <button class="film-mute" type="button" aria-label="Unmute">
+                <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+              </button>
+              <input class="film-vol" type="range" min="0" max="1" step="0.05" value="0" aria-label="Volume">
+            </div>
+          </div>
           <figcaption>Graduation 2026 <span>Personal</span></figcaption>
         </figure>
         <figure class="film-item rv" style="transition-delay:.08s">
-          <video class="film-video" controls preload="metadata" playsinline poster="images/video/am-tournament-2026-poster.jpg">
-            <source src="images/video/am-tournament-2026.mp4" type="video/mp4">
-          </video>
+          <div class="film-wrap">
+            <video class="film-video" autoplay muted loop playsinline preload="metadata" controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture poster="images/video/am-tournament-2026-poster.jpg">
+              <source src="images/video/am-tournament-2026.mp4" type="video/mp4">
+            </video>
+            <div class="film-ctrl" aria-hidden="false">
+              <button class="film-mute" type="button" aria-label="Unmute">
+                <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+              </button>
+              <input class="film-vol" type="range" min="0" max="1" step="0.05" value="0" aria-label="Volume">
+            </div>
+          </div>
           <figcaption>AM Volleyball · Spring Tournament 2026 <span>Event</span></figcaption>
         </figure>
       </div>
@@ -1562,6 +1598,46 @@
       r.addEventListener('mouseenter', ()=>activate(i));
       r.addEventListener('focus', ()=>activate(i));
     });
+  })();
+
+  /* ── Film players: boomerang loop, click for sound, volume-only, no bar/download ── */
+  (function(){
+    const films = [...document.querySelectorAll('.film-video')];
+    if(!films.length) return;
+    films.forEach(v => {
+      v.muted = true; v.volume = 0;
+      const wrap = v.closest('.film-wrap');
+      const btn  = wrap.querySelector('.film-mute');
+      const vol  = wrap.querySelector('.film-vol');
+      const ctrl = wrap.querySelector('.film-ctrl');
+      v._sync = function(){
+        const on = !v.muted && v.volume > 0;
+        btn.classList.toggle('on', on);
+        btn.setAttribute('aria-label', on ? 'Mute' : 'Unmute');
+        vol.value = v.muted ? 0 : v.volume;
+        ctrl.classList.toggle('sound', on);
+      };
+      function soloUnmute(level){
+        films.forEach(o => { if(o !== v){ o.muted = true; o._sync && o._sync(); } });
+        v.muted = false; v.volume = level; v._sync();
+      }
+      function toggle(){ (v.muted || v.volume === 0) ? soloUnmute(0.8) : (v.muted = true, v._sync()); }
+      v.addEventListener('click', toggle);
+      btn.addEventListener('click', e => { e.stopPropagation(); toggle(); });
+      vol.addEventListener('click', e => e.stopPropagation());
+      vol.addEventListener('input', () => {
+        v.volume = parseFloat(vol.value); v.muted = (v.volume === 0);
+        if(!v.muted) films.forEach(o => { if(o !== v){ o.muted = true; o._sync && o._sync(); } });
+        v._sync();
+      });
+      v.addEventListener('contextmenu', e => e.preventDefault());
+      v._sync();
+    });
+    if(reduceMotion){ films.forEach(v => { v.removeAttribute('autoplay'); try{ v.pause(); }catch(e){} }); return; }
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      const v = e.target; e.isIntersecting ? v.play().catch(()=>{}) : v.pause();
+    }), { threshold:0.25 });
+    films.forEach(v => io.observe(v));
   })();
 
   /* ── Reduced-motion: hold looping clips on their poster frame ── */
