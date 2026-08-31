@@ -328,19 +328,21 @@
     ══════════════════════ */
     .about-editorial {
       display:grid;
-      grid-template-columns:1.15fr 1fr 1fr;
-      gap:3vw; align-items:start;
+      grid-template-columns:1.3fr 1fr;
+      gap:4vw; align-items:start;
     }
-    @media(max-width:960px){
-      .about-editorial { grid-template-columns:1fr 1fr; }
-      .about-right-col { grid-column:1/-1; }
+    @media(max-width:900px){
+      .about-editorial { grid-template-columns:1fr; gap:2.5rem; }
+      .about-head-col { align-self:auto; }
+      .about-head-col .about-avail { margin-top:1.8rem; padding-top:0; }
     }
-    @media(max-width:600px){ .about-editorial { grid-template-columns:1fr; } }
 
     .about-head-col {
       align-self:stretch;
-      display:flex; flex-direction:column; justify-content:space-between; gap:2.5rem;
+      display:flex; flex-direction:column;
     }
+    .about-head-col .about-body { margin-top:1.9rem; max-width:54ch; }
+    .about-head-col .about-avail { margin-top:auto; padding-top:2.6rem; }
     .about-avail {
       display:flex; flex-direction:column; gap:.55rem;
       font-family:'JetBrains Mono',monospace; font-size:11px;
@@ -450,7 +452,9 @@
       transition:opacity .55s ease, transform 1.3s cubic-bezier(.16,1,.3,1);
     }
     .ws-frame img.active { opacity:1; transform:scale(1); }
-    .ws-cap { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-top:.95rem; }
+    .ws-cap { margin-top:.95rem; }
+    .ws-cap-row { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .ws-summary { margin-top:.7rem; font-size:13px; line-height:1.6; font-weight:300; color:var(--mu); max-width:60ch; }
     .ws-cap-title { font-family:'Coolvetica','Apollo',sans-serif; text-transform:uppercase; font-size:clamp(16px,1.7vw,23px); color:var(--ink); }
     .ws-cap-link { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ac); text-decoration:none; white-space:nowrap; transition:opacity .2s; }
     .ws-cap-link:hover { opacity:.6; }
@@ -963,19 +967,17 @@
             <span class="line"><span><em>Videographer</em></span></span>
             <span class="line"><span>&amp; Creative</span></span>
           </h2>
+          <div class="about-body rv" style="transition-delay:.1s">
+            <p>I'm <strong>Simba</strong>, a Digital Business &amp; Technology graduate from Manchester Metropolitan University, where I earned a 2:1. I build full-stack web applications and produce video for brands and personal work.</p>
+            <p>My stack spans Next.js, React, TypeScript, C#, and SQL databases. Outside code I run <a href="https://www.instagram.com/dohtts.co/" target="_blank" rel="noopener">dohtts.co</a>, a multimedia production company, and <a href="https://www.instagram.com/simbasarchivesale/" target="_blank" rel="noopener">@simbasarchivesale</a>, a personal visual archive shot on DaVinci Resolve.</p>
+          </div>
           <div class="about-avail rv">
             <span class="av-line"><span class="av-dot" aria-hidden="true"></span> Available for freelance &amp; graduate roles</span>
             <span class="av-loc">Manchester, UK · 2026</span>
           </div>
         </div>
 
-        <!-- col 2: body text -->
-        <div class="about-body rv" style="transition-delay:.1s">
-          <p>I'm <strong>Simba</strong>, a Digital Business &amp; Technology graduate from Manchester Metropolitan University, where I earned a 2:1. I build full-stack web applications and produce video for brands and personal work.</p>
-          <p>My stack spans Next.js, React, TypeScript, C#, and SQL databases. Outside code I run <a href="https://www.instagram.com/dohtts.co/" target="_blank" rel="noopener">dohtts.co</a>, a multimedia production company, and <a href="https://www.instagram.com/simbasarchivesale/" target="_blank" rel="noopener">@simbasarchivesale</a>, a personal visual archive shot on DaVinci Resolve.</p>
-        </div>
-
-        <!-- col 3: stats + education -->
+        <!-- col 2: stats + education -->
         <div class="about-right-col rv" style="transition-delay:.2s">
           <div class="cv-block">
             <div class="cv-title">Stats</div>
@@ -1028,25 +1030,29 @@
 
       <div class="work-split">
         <ul class="work-index rv">
-          <li><a class="wi-row active" data-i="0" href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener">
+          <li><a class="wi-row active" data-i="0" data-summary="Community volleyball coaching across Manchester &amp; Newcastle. Structured sessions, camps and tournaments for 780+ members, from social to competitive." href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener">
             <span class="wi-n">(01)</span><span class="wi-title">AM Volleyball</span><span class="wi-cat">Sports · Next.js</span>
             <img class="wi-m-thumb" src="images/AM Volleyball.png" alt="AM Volleyball website" loading="lazy" decoding="async">
           </a></li>
-          <li><a class="wi-row" data-i="1" href="https://pott-st-bagels.vercel.app/" target="_blank" rel="noopener">
+          <li><a class="wi-row" data-i="1" data-summary="A market bagel shop serving New York-style bagels cold-proved 48 to 60 hours, with house-cured salmon and salt beef. Open Tuesday to Sunday." href="https://pott-st-bagels.vercel.app/" target="_blank" rel="noopener">
             <span class="wi-n">(02)</span><span class="wi-title">Pott St Bagels</span><span class="wi-cat">Food &amp; Drink · Next.js</span>
             <img class="wi-m-thumb" src="images/pottstbagels.png" alt="Pott St Bagels website" loading="lazy" decoding="async">
           </a></li>
-          <li><a class="wi-row" data-i="2" href="https://floranica.vercel.app/" target="_blank" rel="noopener">
+          <li><a class="wi-row" data-i="2" data-summary="A full-stack admin panel for a global flower-distribution business: manage inventory, suppliers and orders across five branches, backed by PostgreSQL." href="https://floranica.vercel.app/" target="_blank" rel="noopener">
             <span class="wi-n">(03)</span><span class="wi-title">Floranica</span><span class="wi-cat">Full-Stack · Prisma / PG</span>
             <img class="wi-m-thumb" src="images/floranica.png" alt="Floranica admin app" loading="lazy" decoding="async">
           </a></li>
-          <li><a class="wi-row" data-i="3" href="https://3minutes.wtf/" target="_blank" rel="noopener">
+          <li><a class="wi-row" data-i="3" data-summary="An awareness platform built around a viral 3-minute film. Viewers take the challenge, then the site captures how they react." href="https://3minutes.wtf/" target="_blank" rel="noopener">
             <span class="wi-n">(04)</span><span class="wi-title">3 Minutes</span><span class="wi-cat">Awareness · Vanilla JS</span>
             <img class="wi-m-thumb" src="images/3minutewtf.png" alt="3 Minutes platform" loading="lazy" decoding="async">
           </a></li>
-          <li><span class="wi-row wi-row--soon" data-i="4" tabindex="0" role="link" aria-disabled="true">
+          <li><span class="wi-row wi-row--soon" data-i="4" data-summary="An earlier iteration of my personal portfolio, hand-built and currently being rebuilt." tabindex="0" role="link" aria-disabled="true">
             <span class="wi-n">(05)</span><span class="wi-title">Falkor Portfolio</span><span class="wi-cat">Portfolio · In progress</span>
             <img class="wi-m-thumb" src="images/Falkor Portfolio.png" alt="Falkor Portfolio" loading="lazy" decoding="async">
+          </span></li>
+          <li><span class="wi-row wi-row--soon" data-i="5" data-summary="A live UK graduate-role scanner. Build your profile once (grade, course, university, sectors, CV) and every role in a daily-refreshed feed of grad schemes and junior roles gets scored against it, with honest confidence on each deadline." tabindex="0" role="link" aria-disabled="true">
+            <span class="wi-n">(06)</span><span class="wi-title">GradScan</span><span class="wi-cat">Grad-role scanner · In progress</span>
+            <img class="wi-m-thumb" src="images/gradscan.png" alt="GradScan" loading="lazy" decoding="async">
           </span></li>
         </ul>
 
@@ -1057,10 +1063,14 @@
             <img data-i="2" src="images/floranica.png" alt="">
             <img data-i="3" src="images/3minutewtf.png" alt="">
             <img data-i="4" src="images/Falkor Portfolio.png" alt="">
+            <img data-i="5" src="images/gradscan.png" alt="">
           </div>
           <div class="ws-cap">
-            <span class="ws-cap-title" id="wsCapTitle">AM Volleyball</span>
-            <a class="ws-cap-link" id="wsCapLink" href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener">Live Site ↗</a>
+            <div class="ws-cap-row">
+              <span class="ws-cap-title" id="wsCapTitle">AM Volleyball</span>
+              <a class="ws-cap-link" id="wsCapLink" href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener">Live Site ↗</a>
+            </div>
+            <p class="ws-summary" id="wsSummary">Community volleyball coaching across Manchester &amp; Newcastle. Structured sessions, camps and tournaments for 780+ members, from social to competitive.</p>
           </div>
         </div>
       </div>
@@ -1507,12 +1517,14 @@
     const imgs = [...document.querySelectorAll('.ws-frame img')];
     const capTitle = document.getElementById('wsCapTitle');
     const capLink  = document.getElementById('wsCapLink');
+    const capSummary = document.getElementById('wsSummary');
     if(!rows.length || !imgs.length || !capTitle || !capLink) return;
     function activate(i){
       rows.forEach((r,idx)=>r.classList.toggle('active', idx===i));
       imgs.forEach(im=>im.classList.toggle('active', Number(im.dataset.i)===i));
       const row = rows[i];
       capTitle.textContent = row.querySelector('.wi-title').textContent;
+      if(capSummary && row.dataset.summary) capSummary.textContent = row.dataset.summary;
       if(row.classList.contains('wi-row--soon')){
         capLink.removeAttribute('href'); capLink.classList.add('soon'); capLink.textContent = 'In progress';
       } else {
