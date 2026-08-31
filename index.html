@@ -395,49 +395,54 @@
       font-size:clamp(13px,1.2vw,16px); font-weight:300; line-height:1.7;
       color:var(--mu); max-width:52ch; margin:1.2rem 0 3rem;
     }
-    /* Expandable works list (NARRATIVE inspo) */
-    .wx-list { list-style:none; border-top:1px solid var(--ink); }
-    .wx-row {
-      display:grid; grid-template-columns:3.4em 1fr auto auto auto;
-      align-items:center; gap:1.4rem;
-      padding:1.35rem 1.1rem; border-bottom:1px solid var(--li);
-      text-decoration:none; color:var(--ink);
-      position:relative; overflow:hidden; transition:color .35s;
+    /* Split "live index" — list left, crossfading sticky preview right */
+    .work-split { display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(2rem,5vw,5rem); align-items:start; margin-top:2.5rem; }
+    .work-index { list-style:none; border-top:1px solid var(--ink); }
+    .wi-row {
+      display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:1rem;
+      padding:1.15rem .5rem; border-bottom:1px solid var(--li);
+      text-decoration:none; color:var(--ink); position:relative;
+      transition:padding-left .35s cubic-bezier(.16,1,.3,1), color .3s;
     }
-    .wx-row::before {
-      content:''; position:absolute; inset:0; background:var(--ink);
-      transform:scaleY(0); transform-origin:bottom; z-index:0;
-      transition:transform .45s cubic-bezier(.16,1,.3,1);
+    .wi-row::after {
+      content:''; position:absolute; left:0; top:15%; bottom:15%; width:2px; background:var(--ac);
+      transform:scaleY(0); transform-origin:center; transition:transform .35s cubic-bezier(.16,1,.3,1);
     }
-    .wx-row:hover::before, .wx-row:focus-visible::before { transform:scaleY(1); }
-    .wx-row:hover, .wx-row:focus-visible { color:var(--bg); }
-    .wx-row > * { position:relative; z-index:1; }
-    .wx-n { font-family:'Apollo',serif; font-style:italic; font-size:clamp(15px,1.6vw,21px); color:var(--ac); }
-    .wx-row:hover .wx-n { color:var(--ac2); }
-    .wx-title {
-      font-family:'Coolvetica','Apollo',sans-serif; font-weight:400; text-transform:uppercase;
-      font-size:clamp(23px,3.9vw,48px); line-height:1; letter-spacing:0;
-      transition:transform .4s cubic-bezier(.16,1,.3,1);
+    .wi-row.active, .wi-row:hover, .wi-row:focus-visible { padding-left:1.2rem; }
+    .wi-row.active::after, .wi-row:hover::after, .wi-row:focus-visible::after { transform:scaleY(1); }
+    .wi-n { grid-column:1; font-family:'Apollo',serif; font-style:italic; font-size:clamp(14px,1.5vw,20px); color:var(--ac); }
+    .wi-title {
+      grid-column:2; font-family:'Coolvetica','Apollo',sans-serif; text-transform:uppercase;
+      font-size:clamp(24px,3.3vw,44px); line-height:1; color:var(--ink); transition:color .3s;
     }
-    .wx-row:hover .wx-title { transform:translateX(.5rem); }
-    .wx-thumb {
-      width:0; opacity:0; overflow:hidden; justify-self:end;
-      transition:width .45s cubic-bezier(.16,1,.3,1), opacity .35s ease;
+    .wi-row.active .wi-title, .wi-row:hover .wi-title, .wi-row:focus-visible .wi-title { color:var(--ac); }
+    .wi-cat { grid-column:3; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); white-space:nowrap; }
+    .wi-row--soon .wi-cat::before { content:''; display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--ac); margin-right:.4rem; vertical-align:middle; }
+    .wi-m-thumb { display:none; }
+
+    .work-stage { position:sticky; top:12vh; }
+    .ws-frame { position:relative; aspect-ratio:4/3; overflow:hidden; background:var(--li); border:1px solid var(--li); }
+    .ws-frame img {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center;
+      opacity:0; transform:scale(1.05); filter:grayscale(.1);
+      transition:opacity .55s ease, transform 1.3s cubic-bezier(.16,1,.3,1);
     }
-    .wx-row:hover .wx-thumb { width:150px; opacity:1; }
-    .wx-thumb img { width:150px; height:64px; object-fit:cover; object-position:top center; display:block; filter:grayscale(1); }
-    .wx-cat { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); white-space:nowrap; transition:color .3s, opacity .3s; }
-    .wx-row:hover .wx-cat { color:var(--bg); opacity:.65; }
-    .wx-arr { font-size:14px; color:var(--mu); transition:transform .4s cubic-bezier(.16,1,.3,1), color .3s; }
-    .wx-row:hover .wx-arr { color:var(--ac2); transform:translate(4px,-4px); }
-    .wx-row--soon { cursor:default; }
-    .wx-row--soon:hover::before { transform:scaleY(0); }
-    .wx-row--soon:hover { color:var(--mu); }
-    .wx-row--soon .wx-title { color:var(--mu); }
-    .wx-row--soon .wx-cat::before { content:''; display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--ac); margin-right:.4rem; vertical-align:middle; }
-    @media(max-width:720px){
-      .wx-row { grid-template-columns:2.4em 1fr auto; gap:.7rem; padding:1.05rem .5rem; }
-      .wx-thumb, .wx-cat { display:none; }
+    .ws-frame img.active { opacity:1; transform:scale(1); }
+    .ws-cap { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-top:.95rem; }
+    .ws-cap-title { font-family:'Coolvetica','Apollo',sans-serif; text-transform:uppercase; font-size:clamp(16px,1.7vw,23px); color:var(--ink); }
+    .ws-cap-link { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ac); text-decoration:none; white-space:nowrap; transition:opacity .2s; }
+    .ws-cap-link:hover { opacity:.6; }
+    .ws-cap-link.soon { color:var(--mu); pointer-events:none; }
+
+    @media(max-width:820px){
+      .work-split { grid-template-columns:1fr; gap:0; margin-top:1.5rem; }
+      .work-stage { display:none; }
+      .wi-row { grid-template-columns:auto 1fr; row-gap:.7rem; padding:1.3rem .2rem 1.5rem; align-items:baseline; }
+      .wi-cat { grid-column:2; grid-row:2; }
+      .wi-m-thumb {
+        display:block; grid-column:1 / -1; grid-row:3; width:100%; aspect-ratio:16/10;
+        object-fit:cover; object-position:top center; filter:grayscale(1); margin-top:.5rem; border:1px solid var(--li);
+      }
     }
 
     /* ══════════════════════
@@ -977,43 +982,44 @@
       <h2 class="work-h2 reveal"><span class="line"><span>Projects I've Built</span></span></h2>
       <p class="work-lead rv" style="transition-delay:.08s">Full-stack applications, client websites and volunteer work — all live and deployed.</p>
 
-      <ul class="wx-list">
-        <li><a class="wx-row rv" href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener">
-          <span class="wx-n">(01)</span>
-          <span class="wx-title">AM Volleyball</span>
-          <span class="wx-thumb"><img src="images/AM Volleyball.png" alt="AM Volleyball website" loading="lazy" decoding="async"></span>
-          <span class="wx-cat">Sports site — Next.js</span>
-          <span class="wx-arr" aria-hidden="true">↗</span>
-        </a></li>
-        <li><a class="wx-row rv" style="transition-delay:.05s" href="https://pott-st-bagels.vercel.app/" target="_blank" rel="noopener">
-          <span class="wx-n">(02)</span>
-          <span class="wx-title">Pott St Bagels</span>
-          <span class="wx-thumb"><img src="images/pottstbagels.png" alt="Pott St Bagels website" loading="lazy" decoding="async"></span>
-          <span class="wx-cat">Food &amp; drink — Next.js</span>
-          <span class="wx-arr" aria-hidden="true">↗</span>
-        </a></li>
-        <li><a class="wx-row rv" style="transition-delay:.1s" href="https://floranica.vercel.app/" target="_blank" rel="noopener">
-          <span class="wx-n">(03)</span>
-          <span class="wx-title">Floranica</span>
-          <span class="wx-thumb"><img src="images/floranica.png" alt="Floranica admin app" loading="lazy" decoding="async"></span>
-          <span class="wx-cat">Full-stack — Prisma / PG</span>
-          <span class="wx-arr" aria-hidden="true">↗</span>
-        </a></li>
-        <li><a class="wx-row rv" style="transition-delay:.15s" href="https://3minutes.wtf/" target="_blank" rel="noopener">
-          <span class="wx-n">(04)</span>
-          <span class="wx-title">3 Minutes</span>
-          <span class="wx-thumb"><img src="images/3minutewtf.png" alt="3 Minutes platform" loading="lazy" decoding="async"></span>
-          <span class="wx-cat">Awareness — Vanilla JS</span>
-          <span class="wx-arr" aria-hidden="true">↗</span>
-        </a></li>
-        <li><span class="wx-row wx-row--soon rv" style="transition-delay:.2s">
-          <span class="wx-n">(05)</span>
-          <span class="wx-title">Falkor Portfolio</span>
-          <span class="wx-thumb"><img src="images/Falkor Portfolio.png" alt="Falkor Portfolio" loading="lazy" decoding="async"></span>
-          <span class="wx-cat">Portfolio — In progress</span>
-          <span class="wx-arr" aria-hidden="true"></span>
-        </span></li>
-      </ul>
+      <div class="work-split">
+        <ul class="work-index rv">
+          <li><a class="wi-row active" data-i="0" href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener">
+            <span class="wi-n">(01)</span><span class="wi-title">AM Volleyball</span><span class="wi-cat">Sports — Next.js</span>
+            <img class="wi-m-thumb" src="images/AM Volleyball.png" alt="AM Volleyball website" loading="lazy" decoding="async">
+          </a></li>
+          <li><a class="wi-row" data-i="1" href="https://pott-st-bagels.vercel.app/" target="_blank" rel="noopener">
+            <span class="wi-n">(02)</span><span class="wi-title">Pott St Bagels</span><span class="wi-cat">Food &amp; Drink — Next.js</span>
+            <img class="wi-m-thumb" src="images/pottstbagels.png" alt="Pott St Bagels website" loading="lazy" decoding="async">
+          </a></li>
+          <li><a class="wi-row" data-i="2" href="https://floranica.vercel.app/" target="_blank" rel="noopener">
+            <span class="wi-n">(03)</span><span class="wi-title">Floranica</span><span class="wi-cat">Full-Stack — Prisma / PG</span>
+            <img class="wi-m-thumb" src="images/floranica.png" alt="Floranica admin app" loading="lazy" decoding="async">
+          </a></li>
+          <li><a class="wi-row" data-i="3" href="https://3minutes.wtf/" target="_blank" rel="noopener">
+            <span class="wi-n">(04)</span><span class="wi-title">3 Minutes</span><span class="wi-cat">Awareness — Vanilla JS</span>
+            <img class="wi-m-thumb" src="images/3minutewtf.png" alt="3 Minutes platform" loading="lazy" decoding="async">
+          </a></li>
+          <li><span class="wi-row wi-row--soon" data-i="4" tabindex="0" role="link" aria-disabled="true">
+            <span class="wi-n">(05)</span><span class="wi-title">Falkor Portfolio</span><span class="wi-cat">Portfolio — In progress</span>
+            <img class="wi-m-thumb" src="images/Falkor Portfolio.png" alt="Falkor Portfolio" loading="lazy" decoding="async">
+          </span></li>
+        </ul>
+
+        <div class="work-stage" aria-hidden="true">
+          <div class="ws-frame">
+            <img class="active" data-i="0" src="images/AM Volleyball.png" alt="">
+            <img data-i="1" src="images/pottstbagels.png" alt="">
+            <img data-i="2" src="images/floranica.png" alt="">
+            <img data-i="3" src="images/3minutewtf.png" alt="">
+            <img data-i="4" src="images/Falkor Portfolio.png" alt="">
+          </div>
+          <div class="ws-cap">
+            <span class="ws-cap-title" id="wsCapTitle">AM Volleyball</span>
+            <a class="ws-cap-link" id="wsCapLink" href="https://am-volleyball.vercel.app/" target="_blank" rel="noopener">Live Site ↗</a>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ═══ KINETIC COLLAGE BAND ══════════════════════ -->
@@ -1447,6 +1453,30 @@
     document.addEventListener('click', e => { if(!controlDock.contains(e.target)) closeDock(); });
     document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDock(); });
   }
+
+  /* ── Work "live index": crossfade preview to the hovered/focused project ── */
+  (function(){
+    const rows = [...document.querySelectorAll('.wi-row')];
+    const imgs = [...document.querySelectorAll('.ws-frame img')];
+    const capTitle = document.getElementById('wsCapTitle');
+    const capLink  = document.getElementById('wsCapLink');
+    if(!rows.length || !imgs.length || !capTitle || !capLink) return;
+    function activate(i){
+      rows.forEach((r,idx)=>r.classList.toggle('active', idx===i));
+      imgs.forEach(im=>im.classList.toggle('active', Number(im.dataset.i)===i));
+      const row = rows[i];
+      capTitle.textContent = row.querySelector('.wi-title').textContent;
+      if(row.classList.contains('wi-row--soon')){
+        capLink.removeAttribute('href'); capLink.classList.add('soon'); capLink.textContent = 'In progress';
+      } else {
+        capLink.setAttribute('href', row.getAttribute('href')); capLink.classList.remove('soon'); capLink.textContent = 'Live Site ↗';
+      }
+    }
+    rows.forEach((r,i)=>{
+      r.addEventListener('mouseenter', ()=>activate(i));
+      r.addEventListener('focus', ()=>activate(i));
+    });
+  })();
 
   /* ── Reduced-motion: hold looping clips on their poster frame ── */
   if(reduceMotion){
