@@ -525,8 +525,23 @@
     .photo-giant em { font-style:italic; }
     .photo-lead {
       font-size:clamp(13px,1.2vw,16px); font-weight:300;
-      line-height:1.85; color:var(--ink); max-width:48ch;
+      line-height:1.85; color:var(--ink); max-width:52ch; margin-top:1.4rem;
     }
+    /* Big clipped "Behind the Lens" title (gallery-poster inspo) */
+    .pl-meta {
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem;
+      border-top:1px solid var(--li); padding-top:.9rem; margin-top:.4rem;
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.14em;
+      text-transform:uppercase; color:var(--mu);
+    }
+    .pl-meta .r { color:var(--ink); }
+    .pl-titleblock { margin:1.4rem 0 2.4rem; }
+    .pl-line {
+      display:block; font-family:'Coolvetica','Apollo',sans-serif; text-transform:uppercase;
+      font-size:clamp(58px,14vw,214px); line-height:.84; letter-spacing:-.02em; color:var(--ink);
+    }
+    .pl-clip { display:block; overflow:hidden; height:.74em; font-size:clamp(58px,14vw,214px); }
+    .pl-clip .pl-line { font-size:1em; line-height:1; }
     .photo-grid { column-count:2; column-gap:1.2rem; }
     @media(max-width:600px){ .photo-grid { column-count:1; } }
     /* opacity-only reveal inside multicol (avoids transform clipping) */
@@ -1051,13 +1066,15 @@
     <!-- ═══ PHOTOGRAPHY ═══════════════════════════════ -->
     <section id="photography" aria-labelledby="photo-heading">
       <div class="ed-label rv" id="photo-heading">(04) Photography</div>
-      <div class="photo-top">
-        <h2 class="photo-giant reveal">
-          <span class="line"><span>Behind</span></span>
-          <span class="line"><span><em>the Lens</em></span></span>
-        </h2>
-        <p class="photo-lead rv" style="transition-delay:.1s">A newer obsession: shooting live music and learning to see in light. What I love most is the atmosphere; watching artists fully commit to their craft is what pushes me to move and keep making my own. Shot from the crowd and colour-graded in Lightroom, lifting shadows, holding the stage haze, shaping the mood frame by frame.</p>
+      <div class="pl-meta rv">
+        <span>Live &amp; Concert Photography</span>
+        <span class="r">Kaytranada · Westside Gunn</span>
       </div>
+      <h2 class="pl-titleblock rv">
+        <span class="pl-line">Behind the</span>
+        <span class="pl-clip"><span class="pl-line">Lens</span></span>
+      </h2>
+      <p class="photo-lead rv" style="transition-delay:.08s">A newer obsession: shooting live music and learning to see in light. Shot from the crowd and colour-graded in Lightroom, chasing the atmosphere of a room fully committed to its craft.</p>
 
       <div class="photo-set-label rv"><span>Kaytranada</span> · Live</div>
       <p class="photo-set-note rv">Co-op Live, Manchester. Halfway through the set he told the room <em>"it's a party, not a concert"</em> and he meant it.</p>
