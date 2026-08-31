@@ -326,15 +326,15 @@
     /* ══════════════════════
        ABOUT — editorial 3-col
     ══════════════════════ */
-    .about-editorial { display:block; }
-    .about-lower {
-      display:grid; grid-template-columns:minmax(0,33rem) 1fr; gap:clamp(2rem,4vw,4rem); align-items:start;
-      margin-top:clamp(2rem,4vw,3.2rem);
+    .about-editorial {
+      display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(2rem,4vw,4.5rem);
+      align-items:stretch; max-width:1080px; margin:0 auto;
     }
-    @media(max-width:820px){ .about-lower { grid-template-columns:1fr; gap:2.5rem; } }
-    .about-body-col { display:flex; flex-direction:column; }
-    .about-body { max-width:56ch; }
-    .about-body-col .about-avail { margin-top:2.2rem; }
+    @media(max-width:820px){ .about-editorial { grid-template-columns:1fr; gap:2.5rem; max-width:none; } }
+    .about-head-col { display:flex; flex-direction:column; }
+    .about-head-col .about-body { margin-top:1.8rem; max-width:52ch; }
+    .about-head-col .about-avail { margin-top:auto; padding-top:2.6rem; }
+    @media(max-width:820px){ .about-head-col .about-avail { margin-top:1.8rem; padding-top:0; } }
     .about-avail {
       display:flex; flex-direction:column; gap:.55rem;
       font-family:'JetBrains Mono',monospace; font-size:11px;
@@ -956,15 +956,13 @@
     <section id="about" aria-labelledby="about-heading">
       <div class="ed-label rv">(01) About</div>
       <div class="about-editorial">
-        <h2 id="about-heading" class="about-giant reveal">
-          <span class="line"><span>Developer,</span></span>
-          <span class="line"><span><em>Videographer</em></span></span>
-          <span class="line"><span>&amp; Creative</span></span>
-        </h2>
-
-        <div class="about-lower">
-          <div class="about-body-col">
-            <div class="about-body rv" style="transition-delay:.1s">
+        <div class="about-head-col">
+          <h2 id="about-heading" class="about-giant reveal">
+            <span class="line"><span>Developer,</span></span>
+            <span class="line"><span><em>Videographer</em></span></span>
+            <span class="line"><span>&amp; Creative</span></span>
+          </h2>
+          <div class="about-body rv" style="transition-delay:.1s">
               <p>I'm <strong>Simba</strong>, a Digital Business &amp; Technology graduate from Manchester Metropolitan University, where I earned a 2:1. I build full-stack web applications and produce video for brands and personal work.</p>
               <p>My stack spans Next.js, React, TypeScript, C#, and SQL databases. Outside code I run <a href="https://www.instagram.com/dohtts.co/" target="_blank" rel="noopener">dohtts.co</a>, a multimedia production company, and <a href="https://www.instagram.com/simbasarchivesale/" target="_blank" rel="noopener">@simbasarchivesale</a>, a personal visual archive shot on DaVinci Resolve.</p>
             </div>
@@ -1014,7 +1012,6 @@
               <div class="edu-yr">2016–2021</div>
             </div>
           </div>
-        </div>
         </div>
 
       </div>
